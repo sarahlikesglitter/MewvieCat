@@ -1,6 +1,15 @@
 <resources>
     <string name="app_name">MewvieCat</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="action_filter">Filter</string>
+    <string name="title_activity_filter">Filter</string>
+
+    <string name="pref_filter_label">Filter</string>
+    <string name="pref_filter_key">filter</string>
+    <string name="pref_filter_default">New Releases</string>
+    <string-array name="pref_filter_string_array">
+        <item>New Releases</item>
+        <item>Popular</item>
+        <item>Top Rated</item>
+    </string-array>
 </resources>
