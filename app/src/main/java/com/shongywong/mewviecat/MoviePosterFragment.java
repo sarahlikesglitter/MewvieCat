@@ -146,9 +146,9 @@ public class MoviePosterFragment extends Fragment
                     return null;
 
                 jsonMoviePostersStr = buffer.toString();
-                Log.v(LOG_TAG, "JSON response " + jsonMoviePostersStr);
-                MoviePoster[] parsedMoviePosters = parseMoviePosterJSON(jsonMoviePostersStr);
 
+                MoviePoster[] parsedMoviePosters = parseMoviePosterJSON(jsonMoviePostersStr);
+                Log.v(LOG_TAG, "JSON response " + jsonMoviePostersStr);
                 return parsedMoviePosters;
             }
             catch (IOException e)
@@ -190,27 +190,28 @@ public class MoviePosterFragment extends Fragment
         {
             try
             {
-                ArrayList<MoviePoster> moviePosterArrayList = new ArrayList<MoviePoster>();
+
 
                 JSONObject jsonObject = new JSONObject(jsonStr);
                 JSONArray jsonMoviesArray = jsonObject.getJSONArray("results");
+                MoviePoster[] moviePosterArray = new MoviePoster[jsonMoviesArray.length()];
                 JSONObject jsonMovie;
 
                 for(int i = 0; i < jsonMoviesArray.length(); i++)
                 {
                     jsonMovie = jsonMoviesArray.getJSONObject(i);
 
-                    moviePosterArrayList.add(new MoviePoster(
+                    moviePosterArray[i] = new MoviePoster(
                             jsonMovie.getString("original_title"),
                             jsonMovie.getString("poster_path"),
                             jsonMovie.getString("release_date"),
                             jsonMovie.getDouble("popularity"),
                             jsonMovie.getDouble("vote_average"),
                             jsonMovie.getString("overview")
-                            ));
+                            );
                 }
 
-                return moviePosterArrayList.toArray(new MoviePoster[moviePosterArrayList.size()]);
+                return moviePosterArray;
             }
             catch(JSONException e)
             {

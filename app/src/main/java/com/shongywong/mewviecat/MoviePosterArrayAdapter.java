@@ -35,7 +35,7 @@ public class MoviePosterArrayAdapter extends ArrayAdapter<MoviePoster>
         }
 
         ImageView posterView = (ImageView)convertView.findViewById(R.id.list_item_movie_poster_imageview);
-        final String BASE_URL = " http://image.tmdb.org/t/p/w185//";
+        final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
 
         Picasso.with(getContext()).load(BASE_URL+moviePoster.mPosterPath).into(posterView);
 
