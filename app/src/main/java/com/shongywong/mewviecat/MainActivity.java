@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         if(id == R.id.action_filter)
         {
-            //TODO start filter fragment
             startActivity(new Intent(this, FilterActivity.class));
 
             return true;

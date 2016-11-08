@@ -8,7 +8,7 @@
     <string name="pref_filter_key">filter</string>
     <string name="pref_filter_default">New Releases</string>
     <string-array name="pref_filter_string_array">
-        <item>New Releases</item>
+        <item>Now Playing</item>
         <item>Popular</item>
         <item>Top Rated</item>
     </string-array>

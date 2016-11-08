@@ -8,7 +8,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 
 /**
- * Created by sarah on 11/3/2016.
+ * Created by shongywong on 11/3/2016.
  */
 public class FilterActivity extends Activity
 {

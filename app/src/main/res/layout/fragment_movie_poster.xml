@@ -4,6 +4,7 @@
              android:layout_height="match_parent"
              tools:context=".MoviePosterFragment">
 
+    //TODO remove this at some point
     <TextView
         android:text="sanity check"
         android:layout_width="wrap_content"
