@@ -9,17 +9,17 @@ public class MoviePoster
     String mPosterPath;
     String mReleaseDate;
     double mPopularity;
-    int mVoteCount;
     double mVoteAverage;
+    String mSummary;
 
     public MoviePoster(String title, String posterPath, String releaseDate, double popularity,
-                       int voteCount, double voteAverage)
+                       double voteAverage, String summary)
     {
         mTitle = title;
         mPosterPath = posterPath;
         mReleaseDate = releaseDate;
         mPopularity = popularity;
-        mVoteCount = voteCount;
         mVoteAverage = voteAverage;
+        mSummary = summary;
     }
 }

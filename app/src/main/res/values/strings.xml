@@ -6,7 +6,7 @@
 
     <string name="pref_filter_label">Filter</string>
     <string name="pref_filter_key">filter</string>
-    <string name="pref_filter_default">New Releases</string>
+    <string name="pref_filter_default">Now Playing</string>
     <string-array name="pref_filter_string_array">
         <item>Now Playing</item>
         <item>Popular</item>

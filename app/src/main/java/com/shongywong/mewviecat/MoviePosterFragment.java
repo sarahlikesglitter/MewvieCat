@@ -2,6 +2,7 @@ package com.shongywong.mewviecat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -13,9 +14,16 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class MoviePosterFragment extends Fragment
@@ -28,6 +36,13 @@ public class MoviePosterFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        updateMovies();
     }
 
     @Override
@@ -60,17 +75,32 @@ public class MoviePosterFragment extends Fragment
     private void updateMovies()
     {
         FetchMoviePostersTask fetchMoviePostersTask = new FetchMoviePostersTask();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String filter = sharedPreferences.getString("filter", "Now Playing");
+        String filter = getFilterForURI();
         fetchMoviePostersTask.execute(filter);
     }
 
-    public class FetchMoviePostersTask extends AsyncTask<String, Void, String[]>
+    private String getFilterForURI()
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String filterStr = sharedPreferences.getString("filter", "Now Playing");
+        String result = "now_playing";
+
+        if(filterStr.equals("Now Playing"))
+            result = "now_playing";
+        else if(filterStr.equals("Popular"))
+            result = "popular";
+        else
+            result = "top_rated";
+
+        return result;
+    }
+
+    public class FetchMoviePostersTask extends AsyncTask<String, Void, MoviePoster[]>
     {
         private final String LOG_TAG = FetchMoviePostersTask.class.getSimpleName();
 
         @Override
-        protected String[] doInBackground(String... params)
+        protected MoviePoster[] doInBackground(String... params)
         {
             if(params == null)
                 return null;
@@ -87,6 +117,39 @@ public class MoviePosterFragment extends Fragment
                 final String LANG_PARAM = "language";
                 String filterParam = params[0];
 
+                Uri uri = Uri.parse(BASE_URL+filterParam+"?").buildUpon()
+                        .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIE_POSTER_API_KEY)
+                        .appendQueryParameter(LANG_PARAM, language)
+                        .build();
+
+                URL url = new URL(uri.toString());
+
+                Log.v(LOG_TAG, "Built URL " + uri.toString());
+
+                urlConnection = (HttpURLConnection)url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+
+                if(inputStream == null)
+                    return null;
+
+                bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+
+                String line;
+                while((line = bufferedReader.readLine()) != null)
+                    buffer.append(line + "\n");
+
+                if(buffer.length() == 0)
+                    return null;
+
+                jsonMoviePostersStr = buffer.toString();
+                Log.v(LOG_TAG, "JSON response " + jsonMoviePostersStr);
+                MoviePoster[] parsedMoviePosters = parseMoviePosterJSON(jsonMoviePostersStr);
+
+                return parsedMoviePosters;
             }
             catch (IOException e)
             {
@@ -109,6 +172,50 @@ public class MoviePosterFragment extends Fragment
                         Log.e(LOG_TAG, "Error closing stream ", e);
                     }
                 }
+            }
+        }
+
+        @Override
+        public void onPostExecute(MoviePoster[] params)
+        {
+            if(params != null)
+            {
+                mArrayAdapter.clear();
+                mArrayAdapter.addAll(params);
+            }
+
+        }
+
+        private MoviePoster[] parseMoviePosterJSON(String jsonStr)
+        {
+            try
+            {
+                ArrayList<MoviePoster> moviePosterArrayList = new ArrayList<MoviePoster>();
+
+                JSONObject jsonObject = new JSONObject(jsonStr);
+                JSONArray jsonMoviesArray = jsonObject.getJSONArray("results");
+                JSONObject jsonMovie;
+
+                for(int i = 0; i < jsonMoviesArray.length(); i++)
+                {
+                    jsonMovie = jsonMoviesArray.getJSONObject(i);
+
+                    moviePosterArrayList.add(new MoviePoster(
+                            jsonMovie.getString("original_title"),
+                            jsonMovie.getString("poster_path"),
+                            jsonMovie.getString("release_date"),
+                            jsonMovie.getDouble("popularity"),
+                            jsonMovie.getDouble("vote_average"),
+                            jsonMovie.getString("overview")
+                            ));
+                }
+
+                return moviePosterArrayList.toArray(new MoviePoster[moviePosterArrayList.size()]);
+            }
+            catch(JSONException e)
+            {
+                Log.e(LOG_TAG, "Error " + e);
+                return null;
             }
         }
     }
