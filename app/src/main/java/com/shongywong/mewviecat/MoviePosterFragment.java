@@ -2,6 +2,8 @@ package com.shongywong.mewviecat;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +32,7 @@ import java.util.ArrayList;
 public class MoviePosterFragment extends Fragment
 {
     private MoviePosterArrayAdapter mArrayAdapter;
+    private ArrayList<MoviePoster> moviesList;
 
     public MoviePosterFragment(){}
 
@@ -36,6 +40,12 @@ public class MoviePosterFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        //TODO possible feature - save user's favorite movies or a list of movies
+        //they want to want in the future
+//        if(savedInstanceState == null || !savedInstanceState.containsKey("moviePosters"))
+//        {
+//            moviesList = new ArrayList<MoviePoster>()
+//        }
     }
 
     @Override
@@ -74,9 +84,24 @@ public class MoviePosterFragment extends Fragment
 
     private void updateMovies()
     {
-        FetchMoviePostersTask fetchMoviePostersTask = new FetchMoviePostersTask();
-        String filter = getFilterForURI();
-        fetchMoviePostersTask.execute(filter);
+        if(isOnline())
+        {
+            FetchMoviePostersTask fetchMoviePostersTask = new FetchMoviePostersTask();
+            String filter = getFilterForURI();
+            fetchMoviePostersTask.execute(filter);
+        }
+        else
+        {
+            Toast.makeText(getActivity(), "Error refreshing movies", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public boolean isOnline()
+    {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(
+                Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     private String getFilterForURI()
