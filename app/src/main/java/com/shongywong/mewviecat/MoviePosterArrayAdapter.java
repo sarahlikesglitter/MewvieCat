@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -34,16 +33,9 @@ public class MoviePosterArrayAdapter extends ArrayAdapter<MoviePoster>
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie_poster, parent, false);
         }
 
-        ImageView posterView = (ImageView)convertView.findViewById(R.id.list_item_movie_poster_imageview);
         final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
-
+        ImageView posterView = (ImageView)convertView.findViewById(R.id.list_item_movie_poster_imageview);
         Picasso.with(getContext()).load(BASE_URL+moviePoster.mPosterPath).into(posterView);
-
-        TextView movieTitleView = (TextView)convertView.findViewById(R.id.list_item_movie_title_textview);
-        movieTitleView.setText(moviePoster.mTitle);
-
-        TextView voteCountView = (TextView)convertView.findViewById(R.id.list_item_vote_count_textview);
-        voteCountView.setText(moviePoster.mVoteAverage+"");
 
         return convertView;
     }

@@ -14,7 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -66,9 +66,9 @@ public class MoviePosterFragment extends Fragment
                 new ArrayList<MoviePoster>()
         );
 
-        ListView listView = (ListView)rootView.findViewById(R.id.listview_movie_poster);
-        listView.setAdapter(mArrayAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        GridView gridView = (GridView)rootView.findViewById(R.id.gridview_movie_poster);
+        gridView.setAdapter(mArrayAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l)
@@ -149,7 +149,7 @@ public class MoviePosterFragment extends Fragment
 
                 URL url = new URL(uri.toString());
 
-                Log.v(LOG_TAG, "Built URL " + uri.toString());
+                Log.d(LOG_TAG, "Built URL " + uri.toString());
 
                 urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -173,7 +173,7 @@ public class MoviePosterFragment extends Fragment
                 jsonMoviePostersStr = buffer.toString();
 
                 MoviePoster[] parsedMoviePosters = parseMoviePosterJSON(jsonMoviePostersStr);
-                Log.v(LOG_TAG, "JSON response " + jsonMoviePostersStr);
+                Log.d(LOG_TAG, "JSON response " + jsonMoviePostersStr);
                 return parsedMoviePosters;
             }
             catch (IOException e)
@@ -215,8 +215,6 @@ public class MoviePosterFragment extends Fragment
         {
             try
             {
-
-
                 JSONObject jsonObject = new JSONObject(jsonStr);
                 JSONArray jsonMoviesArray = jsonObject.getJSONArray("results");
                 MoviePoster[] moviePosterArray = new MoviePoster[jsonMoviesArray.length()];
