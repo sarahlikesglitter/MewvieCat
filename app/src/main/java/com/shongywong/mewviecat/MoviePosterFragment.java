@@ -1,6 +1,7 @@
 package com.shongywong.mewviecat;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -74,8 +75,9 @@ public class MoviePosterFragment extends Fragment
             public void onItemClick(AdapterView<?> adapterView, View view, int index, long l)
             {
                 MoviePoster moviePoster = mArrayAdapter.getItem(index);
-                Context context = getActivity();
-
+                Intent movieDetailIntent = new Intent(getActivity(), MovieDetailActivity.class);
+                movieDetailIntent.putExtra(Constants.PARCEL_MOVIE_DETAIL_STR, moviePoster);
+                startActivity(movieDetailIntent);
             }
         });
 
@@ -107,15 +109,15 @@ public class MoviePosterFragment extends Fragment
     private String getFilterForURI()
     {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String filterStr = sharedPreferences.getString("filter", "Now Playing");
-        String result = "now_playing";
+        String filterStr = sharedPreferences.getString(Constants.PREF_FILTER_STR, Constants.PREF_KEY_FILTER_NOW_PLAYING_STR);
+        String result = Constants.PREF_VAL_FILTER_NOW_PLAYING_STR;
 
-        if(filterStr.equals("Now Playing"))
-            result = "now_playing";
-        else if(filterStr.equals("Popular"))
-            result = "popular";
+        if(filterStr.equals(Constants.PREF_KEY_FILTER_NOW_PLAYING_STR))
+            result = Constants.PREF_VAL_FILTER_NOW_PLAYING_STR;
+        else if(filterStr.equals(Constants.PREF_KEY_FILTER_POPULAR_STR))
+            result = Constants.PREF_VAL_FILTER_POPULAR_STR;
         else
-            result = "top_rated";
+            result = Constants.PREF_VAL_FILTER_TOP_RATED_STR;
 
         return result;
     }

@@ -53,7 +53,7 @@ public class MoviePoster implements Parcelable
         parcel.writeString(mSummary);
     }
 
-    public final Parcelable.Creator<MoviePoster> CREATOR = new Parcelable.Creator<MoviePoster>()
+    public static final Parcelable.Creator<MoviePoster> CREATOR = new Parcelable.Creator<MoviePoster>()
     {
         @Override
         public MoviePoster createFromParcel(Parcel parcel)

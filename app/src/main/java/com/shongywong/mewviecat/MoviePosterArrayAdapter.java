@@ -33,9 +33,8 @@ public class MoviePosterArrayAdapter extends ArrayAdapter<MoviePoster>
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie_poster, parent, false);
         }
 
-        final String BASE_URL = "http://image.tmdb.org/t/p/w185/";
         ImageView posterView = (ImageView)convertView.findViewById(R.id.list_item_movie_poster_imageview);
-        Picasso.with(getContext()).load(BASE_URL+moviePoster.mPosterPath).into(posterView);
+        Picasso.with(getContext()).load(Constants.BASE_URL_MOVIE_POSTER+moviePoster.mPosterPath).into(posterView);
 
         return convertView;
     }
