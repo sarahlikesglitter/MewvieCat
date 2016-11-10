@@ -4,7 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/list_item_movie_poster_imageview"
+        android:id="@+id/grid_item_movie_poster_imageview"
         android:layout_width="fill_parent"
         android:layout_height="150dp"
         android:scaleType="fitCenter"

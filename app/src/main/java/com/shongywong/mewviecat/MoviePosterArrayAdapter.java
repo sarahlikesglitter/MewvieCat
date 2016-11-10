@@ -30,10 +30,10 @@ public class MoviePosterArrayAdapter extends ArrayAdapter<MoviePoster>
 
         if(convertView == null)
         {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_movie_poster, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.grid_item_movie_poster, parent, false);
         }
 
-        ImageView posterView = (ImageView)convertView.findViewById(R.id.list_item_movie_poster_imageview);
+        ImageView posterView = (ImageView)convertView.findViewById(R.id.grid_item_movie_poster_imageview);
         final String SIZE = "w185/";
         Picasso.with(getContext()).load(Constants.BASE_URL_MOVIE_POSTER+SIZE+moviePoster.mPosterPath).into(posterView);
 

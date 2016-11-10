@@ -1,6 +1,7 @@
 package com.shongywong.mewviecat;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -9,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -92,8 +94,13 @@ public class MovieDetailActivity extends AppCompatActivity
 
                 ScrollView scrollView = (ScrollView)rootView.findViewById((R.id.scrollView));
 
-                TextView summaryTextView = (TextView)scrollView.findViewById(R.id.textView4_frag_movie_detail_summary);
-                summaryTextView.setText(mMoviePoster.mSummary);
+                WebView summaryWebView = (WebView)scrollView.findViewById(R.id.webView_frag_movie_detail_summary);
+                StringBuilder summaryText = new StringBuilder();
+                summaryText.append("<html><body><p align=\"justify\">");
+                summaryText.append(mMoviePoster.mSummary);
+                summaryText.append("</p></body></html>");
+                summaryWebView.setBackgroundColor(Color.TRANSPARENT);
+                summaryWebView.loadData(summaryText.toString(), "text/html", "utf-8");
             }
             return rootView;
         }

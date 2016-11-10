@@ -15,8 +15,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:src="@mipmap/ic_launcher"
-        android:minHeight="300dp"
-        android:minWidth="200dp"
+        android:minHeight="290dp"
+        android:minWidth="190dp"
         android:paddingTop="10dp"
         android:paddingBottom="10dp"
         android:scaleType="fitCenter"/>
@@ -29,7 +29,9 @@
         android:id="@+id/textView_frag_movie_detail_title"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/imageView_frag_movie_detail_poster"
-        android:layout_toEndOf="@+id/imageView_frag_movie_detail_poster"/>
+        android:layout_toEndOf="@+id/imageView_frag_movie_detail_poster"
+        android:paddingTop="3dp"
+        android:paddingBottom="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -40,7 +42,8 @@
         android:layout_below="@+id/textView_frag_movie_detail_title"
         android:layout_toRightOf="@+id/imageView_frag_movie_detail_poster"
         android:layout_toEndOf="@+id/imageView_frag_movie_detail_poster"
-        android:textSize="12dp"/>
+        android:textSize="14dp"
+        android:paddingBottom="10dp"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -51,7 +54,7 @@
         android:layout_below="@+id/textView2_frag_movie_detail_date"
         android:layout_toRightOf="@+id/imageView_frag_movie_detail_poster"
         android:layout_toEndOf="@+id/imageView_frag_movie_detail_poster"
-        android:textSize="12dp"/>
+        android:textSize="14dp"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -61,12 +64,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
-        <TextView
+        <WebView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="New Text"
-            android:id="@+id/textView4_frag_movie_detail_summary"
-            android:textSize="18dp"/>
+            android:id="@+id/webView_frag_movie_detail_summary"
+            android:textSize="18dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"/>
     </ScrollView>
 
 </RelativeLayout>
