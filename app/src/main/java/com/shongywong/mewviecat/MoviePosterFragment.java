@@ -86,7 +86,6 @@ public class MoviePosterFragment extends Fragment
             @Override
             public boolean onLoadMore(int page, int totalItemsCount)
             {
-                Log.v("ScrollListener ", "onloadmore Calling updateMovies..");
                 mCurrentpage = page;
                 updateMovies(mCurrentpage);
                 return true;
@@ -166,8 +165,6 @@ public class MoviePosterFragment extends Fragment
 
                 URL url = new URL(uri.toString());
 
-                Log.d(LOG_TAG, "Built URL " + uri.toString());
-
                 urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -190,7 +187,6 @@ public class MoviePosterFragment extends Fragment
                 jsonMoviePostersStr = buffer.toString();
 
                 MoviePoster[] parsedMoviePosters = parseMoviePosterJSON(jsonMoviePostersStr);
-                Log.d(LOG_TAG, "JSON response " + jsonMoviePostersStr);
                 return parsedMoviePosters;
             }
             catch (IOException e)
