@@ -34,6 +34,7 @@ public class MoviePosterFragment extends Fragment
 {
     private MoviePosterArrayAdapter mArrayAdapter;
     private ArrayList<MoviePoster> moviesList;
+    private int mCurrentpage = 1;
 
     public MoviePosterFragment(){}
 
@@ -53,7 +54,7 @@ public class MoviePosterFragment extends Fragment
     public void onStart()
     {
         super.onStart();
-        updateMovies();
+        updateMovies(mCurrentpage);
     }
 
     @Override
@@ -80,17 +81,28 @@ public class MoviePosterFragment extends Fragment
                 startActivity(movieDetailIntent);
             }
         });
+        gridView.setOnScrollListener(new EndlessScrollListener()
+        {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount)
+            {
+                Log.v("ScrollListener ", "onloadmore Calling updateMovies..");
+                mCurrentpage = page;
+                updateMovies(mCurrentpage);
+                return true;
+            }
+        });
 
         return rootView;
     }
 
-    private void updateMovies()
+    private void updateMovies(int page)
     {
         if(isOnline())
         {
             FetchMoviePostersTask fetchMoviePostersTask = new FetchMoviePostersTask();
             String filter = getFilterForURI();
-            fetchMoviePostersTask.execute(filter);
+            fetchMoviePostersTask.execute(filter, page+"");
         }
         else
         {
@@ -135,18 +147,21 @@ public class MoviePosterFragment extends Fragment
             HttpURLConnection urlConnection = null;
             BufferedReader bufferedReader = null;
             String jsonMoviePostersStr = null;
-            String language = "en-US";
+            String languageParam = "en-US";
 
             try
             {
                 final String BASE_URL = "https://api.themoviedb.org/3/movie/";
                 final String API_KEY_PARAM= "api_key";
                 final String LANG_PARAM = "language";
+                final String PAGE_PARAM = "page";
                 String filterParam = params[0];
+                String pageParam = params[1];
 
                 Uri uri = Uri.parse(BASE_URL+filterParam+"?").buildUpon()
                         .appendQueryParameter(API_KEY_PARAM, BuildConfig.MOVIE_POSTER_API_KEY)
-                        .appendQueryParameter(LANG_PARAM, language)
+                        .appendQueryParameter(LANG_PARAM, languageParam)
+                        .appendQueryParameter(PAGE_PARAM, pageParam)
                         .build();
 
                 URL url = new URL(uri.toString());
@@ -207,8 +222,10 @@ public class MoviePosterFragment extends Fragment
         {
             if(params != null)
             {
-                mArrayAdapter.clear();
+                if(mCurrentpage == 1)
+                    mArrayAdapter.clear();
                 mArrayAdapter.addAll(params);
+                mArrayAdapter.notifyDataSetChanged();
             }
 
         }

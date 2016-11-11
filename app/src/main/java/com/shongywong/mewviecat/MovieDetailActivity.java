@@ -87,7 +87,7 @@ public class MovieDetailActivity extends AppCompatActivity
                 titleTextView.setText(mMoviePoster.mTitle);
 
                 TextView releaseDateTextView = (TextView)rootView.findViewById(R.id.textView2_frag_movie_detail_date);
-                releaseDateTextView.setText("Released " + mMoviePoster.mReleaseDate);
+                releaseDateTextView.setText("Released: " + mMoviePoster.mReleaseDate);
 
                 TextView ratingTextView = (TextView)rootView.findViewById(R.id.textView3_frag_movie_detail_rating);
                 ratingTextView.setText("Viewer Rating: " + mMoviePoster.mVoteAverage);
