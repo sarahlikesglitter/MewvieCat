@@ -62,7 +62,6 @@ public class MoviePosterArrayAdapter extends ArrayAdapter<MoviePoster>
                     {
                         titleView.setText(titleText);
                         progressBar.setVisibility(View.GONE);
-                        posterView.setAlpha(100);
                     }
                 });
 

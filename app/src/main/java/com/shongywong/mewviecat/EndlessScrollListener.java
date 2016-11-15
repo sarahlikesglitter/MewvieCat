@@ -12,6 +12,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     private int mPrevTotalItemCount = 0;
     private boolean mLoading = true;
     private int mStartPageIndex = 0;
+    private String mFilterPref = Constants.PREF_KEY_FILTER_NOW_PLAYING_STR;
 
     public EndlessScrollListener(){}
 
