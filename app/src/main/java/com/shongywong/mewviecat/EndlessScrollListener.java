@@ -1,5 +1,6 @@
 package com.shongywong.mewviecat;
 
+import android.util.Log;
 import android.widget.AbsListView;
 
 /**
@@ -7,12 +8,12 @@ import android.widget.AbsListView;
  */
 public abstract class EndlessScrollListener implements AbsListView.OnScrollListener
 {
+    private final String LOG_TAG = EndlessScrollListener.class.getSimpleName();
     private int mVisibleThreshold = 12;
     private int mCurrentPage = 0;
     private int mPrevTotalItemCount = 0;
     private boolean mLoading = true;
     private int mStartPageIndex = 0;
-    private String mFilterPref = Constants.PREF_KEY_FILTER_NOW_PLAYING_STR;
 
     public EndlessScrollListener(){}
 
@@ -37,6 +38,7 @@ public abstract class EndlessScrollListener implements AbsListView.OnScrollListe
     public void onScroll(AbsListView absListView, int firstVisibleIndex,
                          int visibleItemCount, int totalItemCount)
     {
+        Log.v(LOG_TAG, "current page " + mCurrentPage);
         if(totalItemCount < mPrevTotalItemCount)
         {
             mCurrentPage = mStartPageIndex;

@@ -32,11 +32,17 @@ import java.util.ArrayList;
 
 public class MoviePosterFragment extends Fragment
 {
+    private final String LOG_TAG = MoviePosterFragment.class.getSimpleName();
     private MoviePosterArrayAdapter mArrayAdapter;
     private ArrayList<MoviePoster> moviesList;
-    private int mCurrentpage = 1;
+    private int mCurrentPage = 1;
+    private String mPreviousFilter;
+    private String mCurrentFilter;
 
-    public MoviePosterFragment(){}
+    public MoviePosterFragment()
+    {
+
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -54,13 +60,14 @@ public class MoviePosterFragment extends Fragment
     public void onStart()
     {
         super.onStart();
-        updateMovies(mCurrentpage);
+        updateMovies(mCurrentPage);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
+        mPreviousFilter = getFilterForURI();
         View rootView = inflater.inflate(R.layout.fragment_movie_poster, container, false);
 
         mArrayAdapter = new MoviePosterArrayAdapter(
@@ -86,8 +93,8 @@ public class MoviePosterFragment extends Fragment
             @Override
             public boolean onLoadMore(int page, int totalItemsCount)
             {
-                mCurrentpage = page;
-                updateMovies(mCurrentpage);
+                mCurrentPage = page;
+                updateMovies(mCurrentPage);
                 return true;
             }
         });
@@ -100,8 +107,15 @@ public class MoviePosterFragment extends Fragment
         if(isOnline())
         {
             FetchMoviePostersTask fetchMoviePostersTask = new FetchMoviePostersTask();
-            String filter = getFilterForURI();
-            fetchMoviePostersTask.execute(filter, page+"");
+            mCurrentFilter = getFilterForURI();
+            if(mPreviousFilter != null && !mPreviousFilter.equals(mCurrentFilter))
+            {
+                mArrayAdapter.clear();
+                mPreviousFilter = mCurrentFilter;
+                page = 1;
+                mCurrentPage = page;
+            }
+            fetchMoviePostersTask.execute(mCurrentFilter, page+"");
         }
         else
         {
@@ -218,7 +232,7 @@ public class MoviePosterFragment extends Fragment
         {
             if(params != null)
             {
-                if(mCurrentpage == 1)
+                if(mCurrentPage == 1)
                     mArrayAdapter.clear();
                 mArrayAdapter.addAll(params);
                 mArrayAdapter.notifyDataSetChanged();
