@@ -12,9 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class MovieDetailActivity extends AppCompatActivity
@@ -78,9 +80,28 @@ public class MovieDetailActivity extends AppCompatActivity
             {
                 mMoviePoster = intent.getParcelableExtra(Constants.PARCEL_MOVIE_DETAIL_STR);
 
+                final ProgressBar progressBar = (ProgressBar)rootView.findViewById(R.id.progressBar_frag_movie_detail);
+                progressBar.setVisibility(View.VISIBLE);
+
                 ImageView posterView = (ImageView)rootView.findViewById(R.id.imageView_frag_movie_detail_poster);
                 final String SIZE = "w342";
-                Picasso.with(getContext()).load(Constants.BASE_URL_MOVIE_POSTER+SIZE+mMoviePoster.mPosterPath).into(posterView);
+                Picasso.with(getContext())
+                        .load(Constants.BASE_URL_MOVIE_POSTER+SIZE+mMoviePoster.mPosterPath)
+                        .error(R.drawable.movie_poster_placeholder)
+                        .into(posterView, new Callback()
+                        {
+                            @Override
+                            public void onSuccess()
+                            {
+                                progressBar.setVisibility(View.GONE);
+                            }
+
+                            @Override
+                            public void onError()
+                            {
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        });
 
                 //BUG with showing the details. the title textview gets overwritten by whatever comes after
                 TextView titleTextView = (TextView)rootView.findViewById(R.id.textView_frag_movie_detail_title);
